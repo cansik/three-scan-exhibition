@@ -1,7 +1,7 @@
 package ch.bildspur.threescan.configuration
 
 import ch.bildspur.threescan.Application
-import ch.bildspur.threescan.model.AppConfig
+import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.model.DataModel
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.get

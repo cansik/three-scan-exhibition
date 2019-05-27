@@ -8,6 +8,7 @@ version '1.0-SNAPSHOT'
 
 application {
     mainClassName = "ch.bildspur.threescan.Main"
+    applicationDefaultJvmArgs = ["-Djava.library.path=lib/serial/macosx"]
 }
 
 repositories {
@@ -28,6 +29,10 @@ dependencies {
 
     // peasycam
     compile files('lib/peasycam/peasycam.jar')
+
+    // serial
+    compile files('lib/serial/jssc.jar')
+    compile files('lib/serial/serial.jar')
 }
 
 compileKotlin {

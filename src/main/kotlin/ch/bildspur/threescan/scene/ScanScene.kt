@@ -10,11 +10,14 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     }
 
     override fun start() {
-
+        app.scanner.onScanSync += {
+            println("sync received!")
+        }
     }
 
     override fun logic() {
-
+        if(!app.scanner.scanning)
+            app.scanner.startScan()
     }
 
     override fun draw(g : PGraphics) {

@@ -1,7 +1,7 @@
 package ch.bildspur.threescan.scene
 
 import ch.bildspur.threescan.Application
-import ch.bildspur.threescan.model.AppConfig
+import ch.bildspur.threescan.model.config.AppConfig
 import processing.core.PGraphics
 
 abstract class BaseScene(val name: String, val app : Application) {
