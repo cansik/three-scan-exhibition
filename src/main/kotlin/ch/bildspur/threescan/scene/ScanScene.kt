@@ -1,33 +1,48 @@
 package ch.bildspur.threescan.scene
 
 import ch.bildspur.threescan.Application
+import ch.bildspur.threescan.controller.PointCloudSync
+import ch.bildspur.threescan.model.pointcloud.PointCloud
 import processing.core.PConstants
 import processing.core.PGraphics
 
 class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
-    override fun setup() {
+    var pointCloud = PointCloud(app)
 
+    var cloudSync = PointCloudSync(app.scanner, pointCloud)
+
+    override fun setup() {
+        app.scanner.onScanEnd += {
+            println("end")
+        }
+
+        cloudSync.setup()
     }
 
     override fun start() {
-        app.scanner.onScanSync += {
-            println("sync received!")
-        }
+        cloudSync.reset()
+        pointCloud.create()
+
+        // start scanning
+        if(!app.scanner.scanning)
+            app.scanner.startScan()
     }
 
     override fun logic() {
-        if(!app.scanner.scanning)
-            app.scanner.startScan()
+        cloudSync.update()
     }
 
     override fun draw(g : PGraphics) {
         g.background(22f)
 
+        // render pointcloud
+        app.pointCloudRenderer.render(g, pointCloud)
+
         app.cam.hud {
             app.style.h2()
             g.fill(255f)
-            g.textAlign(PConstants.CENTER, PConstants.CENTER)
-            g.text("scanning...", g.width / 2.0f, g.height / 2.0f)
+            g.textAlign(PConstants.LEFT, PConstants.BOTTOM)
+            g.text("scanning... Points: [${pointCloud.size}]", 20f, 30f)
         }
     }
 

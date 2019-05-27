@@ -2,8 +2,11 @@ package ch.bildspur.threescan.io.serial
 
 import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.event.Event
+import ch.bildspur.threescan.model.pointcloud.Vertex
+import processing.core.PVector
 import java.lang.Float.parseFloat
 import java.lang.Integer.parseInt
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.concurrent.thread
 
 
@@ -18,12 +21,19 @@ class ThreeScanClient(val app : Application) {
     @Volatile var scanning = false
         private set
 
+    // todo: maybe split up into public and private vertex buffer
+    private val vertexBuffer = CopyOnWriteArrayList<Vertex>()
+
     // events
     val onScanSync = Event<Int>()
     val onScanData = Event<Int>()
     val onScanEnd = Event<Int>()
 
     var displayScannerDebugMessages = true
+
+    fun getVertexBuffer() : List<Vertex> {
+        return vertexBuffer
+    }
 
     fun open() {
         mcu.attach()
@@ -45,6 +55,8 @@ class ThreeScanClient(val app : Application) {
     }
 
     fun startScan() {
+        vertexBuffer.clear()
+
         mcu.writeCommand("CMD:SET:ST:1")
         Thread.sleep(100)
         mcu.writeCommand("CMD:START")
@@ -88,7 +100,7 @@ class ThreeScanClient(val app : Application) {
     private fun runCommand(cmd : String, data : List<String>) {
         when(cmd) {
             "SYN" -> {
-                onScanSync(0)
+                onScanSync(vertexBuffer.size - 1)
             }
 
             "DAT" -> {
@@ -98,14 +110,13 @@ class ThreeScanClient(val app : Application) {
                 val z = parseFloat(data[2].trim())
                 val signalStrength = parseInt(data[3].trim())
 
-                //vbo.add(Vertex(PVector(x, y, z), signalStrength))
-
-                onScanData(0)
+                vertexBuffer.add(Vertex(PVector(x, y, z), signalStrength))
+                onScanData(vertexBuffer.size - 1)
             }
 
             "END" -> {
                 scanning = false
-                onScanEnd(0)
+                onScanEnd(vertexBuffer.size - 1)
             }
         }
     }

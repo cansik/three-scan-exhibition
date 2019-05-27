@@ -1,6 +1,7 @@
 package ch.bildspur.threescan
 
 import ch.bildspur.threescan.controller.PeasyController
+import ch.bildspur.threescan.controller.PointCloudRenderer
 import ch.bildspur.threescan.io.serial.ThreeScanClient
 import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.scene.SceneManager
@@ -37,13 +38,15 @@ class Application(val config: AppConfig) : PApplet() {
         }
     }
 
+    val scanner = ThreeScanClient(this)
+
+    val pointCloudRenderer = PointCloudRenderer(this)
+
     val sceneManager = SceneManager(this)
 
     val style = AppStyle(this)
 
     val cam = PeasyController(this)
-
-    val scanner = ThreeScanClient(this)
 
     override fun settings() {
         super.settings()
@@ -65,6 +68,9 @@ class Application(val config: AppConfig) : PApplet() {
 
         // setup io
         scanner.open()
+
+        // setup renderer
+        pointCloudRenderer.setup()
 
         // setup app
         style.setup(this.g)
