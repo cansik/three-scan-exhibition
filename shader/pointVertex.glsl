@@ -20,8 +20,8 @@ void main() {
 	pt /= pointScale;
 
 	// change color
-	vec4 c = mix(color, pointColor, colorMix);
-	c = vec4(intensity, 0.0, 1.0, 1.0);
+	vec4 c = color; //mix(color, pointColor, colorMix);
+	c = vec4(color.r, intensity, 1.0, 1.0);
 
 	// apply view matrix
 	vec4 pos = modelview * pt;
