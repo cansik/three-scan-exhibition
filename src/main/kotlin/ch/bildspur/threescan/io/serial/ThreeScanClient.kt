@@ -2,12 +2,9 @@ package ch.bildspur.threescan.io.serial
 
 import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.event.Event
-import ch.bildspur.threescan.model.pointcloud.Vertex
-import kotlin.concurrent.thread
-import processing.core.PVector
-import java.lang.Exception
 import java.lang.Float.parseFloat
 import java.lang.Integer.parseInt
+import kotlin.concurrent.thread
 
 
 class ThreeScanClient(val app : Application) {

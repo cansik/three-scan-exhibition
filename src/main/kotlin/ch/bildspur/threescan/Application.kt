@@ -63,10 +63,13 @@ class Application(val config: AppConfig) : PApplet() {
         surface.setTitle("$NAME - $VERSION")
         frameRate(config.visual.frameRate.value.toFloat())
 
+        // setup io
+        scanner.open()
+
+        // setup app
         style.setup(this.g)
         cam.setup()
         sceneManager.setup()
-        scanner.open()
     }
 
     override fun draw() {

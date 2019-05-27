@@ -7,7 +7,7 @@ class SerialClient(val app : Application) {
     var port: Serial? = null
 
     fun isAttached(): Boolean {
-        return null == port
+        return null != port
     }
 
     fun attach() {
