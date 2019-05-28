@@ -6,6 +6,7 @@ import ch.bildspur.threescan.io.serial.ThreeScanClient
 import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.scene.SceneManager
 import ch.bildspur.threescan.style.AppStyle
+import ch.bildspur.threescan.util.format
 import processing.core.PApplet
 import processing.core.PConstants
 import kotlin.math.roundToInt

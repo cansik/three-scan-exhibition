@@ -6,7 +6,8 @@ import ch.bildspur.threescan.model.pointcloud.PointCloud
 class PointCloudSync(var scanner : ThreeScanClient,
                      var pointCloud : PointCloud,
                      var syncEveryPoint : Boolean = false,
-                     var syncLimited : Boolean = false) {
+                     var syncLimited : Boolean = false,
+                     var syncPointLimit : Int = 10) {
 
     @Volatile private var currentIndex = 0
     private var syncIndex = 0
@@ -30,7 +31,7 @@ class PointCloudSync(var scanner : ThreeScanClient,
         // main thread
         if(currentIndex != syncIndex) {
             if(syncLimited) {
-                syncPointsLimited(1)
+                syncPointsLimited(syncPointLimit)
             }
             else {
                 syncPoints()

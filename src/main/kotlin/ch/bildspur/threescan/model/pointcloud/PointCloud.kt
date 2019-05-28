@@ -5,7 +5,7 @@ import processing.core.PConstants.POINTS
 import processing.core.PShape
 import processing.core.PVector
 
-class PointCloud(val app : PApplet, val bufferSize : Int = 1024 * 50) {
+class PointCloud(val app : PApplet, val bufferSize : Int = 1024 * 30) {
     var scale : Float = 1.0f
     var position = PVector()
 
