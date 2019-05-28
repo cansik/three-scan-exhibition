@@ -66,6 +66,10 @@ class Application(val config: AppConfig) : PApplet() {
         surface.setTitle("$NAME - $VERSION")
         frameRate(config.visual.frameRate.value.toFloat())
 
+        // setup style
+        // change clipping
+        //perspective((PConstants.PI / 3.0).toFloat(), width.toFloat() / height, 0.1f, 100000f)
+
         // setup io
         scanner.open()
 

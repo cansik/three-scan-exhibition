@@ -2,6 +2,8 @@ package ch.bildspur.threescan.scene
 
 import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.controller.PointCloudSync
+import ch.bildspur.threescan.controller.timer.Timer
+import ch.bildspur.threescan.controller.timer.TimerTask
 import ch.bildspur.threescan.model.pointcloud.PointCloud
 import processing.core.PConstants
 import processing.core.PGraphics
@@ -9,7 +11,10 @@ import processing.core.PGraphics
 class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     var pointCloud = PointCloud(app)
 
-    var cloudSync = PointCloudSync(app.scanner, pointCloud)
+    var cloudSync = PointCloudSync(app.scanner, pointCloud,
+        syncEveryPoint = true, syncLimited = true)
+
+    val syncTimer = Timer()
 
     override fun setup() {
         app.scanner.onScanEnd += {
@@ -17,6 +22,12 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         }
 
         cloudSync.setup()
+        syncTimer.setup()
+
+        // add sync task
+        syncTimer.addTask(TimerTask(20, {
+            cloudSync.update()
+        }))
     }
 
     override fun start() {
@@ -29,7 +40,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     }
 
     override fun logic() {
-        cloudSync.update()
+        syncTimer.update()
     }
 
     override fun draw(g : PGraphics) {
