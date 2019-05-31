@@ -49,11 +49,14 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     override fun draw(g : PGraphics) {
         g.background(22f)
 
-        highLightNewPoints(g)
+        // highlight points
+        if(app.scanner.scanning)
+            highLightNewPoints(g)
 
         // render pointcloud
         app.pointCloudRenderer.render(g, pointCloud)
 
+        // draw hud
         app.cam.hud {
             app.style.text()
             g.fill(255f)
