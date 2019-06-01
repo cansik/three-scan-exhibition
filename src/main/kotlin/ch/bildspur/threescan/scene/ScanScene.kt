@@ -53,6 +53,8 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         if(app.scanner.scanning)
             highLightNewPoints(g)
 
+        app.cam.cam.rotateY(0.001)
+
         // render pointcloud
         app.pointCloudRenderer.render(g, pointCloud)
 
