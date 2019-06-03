@@ -7,8 +7,12 @@ import ch.bildspur.threescan.controller.timer.Timer
 import ch.bildspur.threescan.controller.timer.TimerTask
 import ch.bildspur.threescan.model.pointcloud.PointCloud
 import ch.bildspur.threescan.util.format
+import ch.bildspur.threescan.util.rotate
+import ch.bildspur.threescan.util.translate
+import processing.core.PApplet
 import processing.core.PConstants
 import processing.core.PGraphics
+import processing.core.PVector
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -29,6 +33,10 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
         cloudSync.setup()
         timer.setup()
+
+        // set pointcloud translation
+        pointCloud.translation = PVector(0f, 100f, 0f)
+        pointCloud.rotation = PVector(PApplet.radians(90f), 0f, 0f)
 
         // add sync task
         timer.addTask(TimerTask(100, {
@@ -56,7 +64,8 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         if(app.scanner.scanning)
             highLightNewPoints(g)
 
-        app.cam.cam.rotateY(0.001)
+        // auto rotate camera
+        app.cam.cam.rotateY(app.config.camerYRotationSpeed.value)
 
         // render pointcloud
         app.pointCloudRenderer.render(g, pointCloud)
@@ -70,25 +79,14 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         }
     }
 
-    private fun showLinesFromScanner(g: PGraphics) {
-        // line test
-        for(i in 0 until 35) {
-            val index = pointCloud.size - (1 + i)
-
-            if(index < 0)
-                break
-
-            val v = pointCloud.vertexBuffer.getVertex(index)
-
-            g.strokeWeight(0.5f)
-            g.noFill()
-            g.stroke(255)
-            g.line(0f, 0f, 0f, v.x, v.y, v.z)
-        }
-    }
-
     private fun highLightNewPoints(g: PGraphics) {
         // line test
+        g.push()
+        // set coordinates to current pointcloud
+        g.translate(pointCloud.translation)
+        g.rotate(pointCloud.rotation)
+        g.scale(pointCloud.scale)
+
         for(i in 0 until 35) {
             val indexPointA = pointCloud.size - (1 + i)
             val indexPointB = pointCloud.size - (2 + i)
@@ -104,13 +102,15 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             g.stroke(255)
             g.line(a.x, a.y, a.z, b.x, b.y, b.z)
         }
+        g.pop()
     }
 
     private fun scanEnded() {
+        // not in main thread!
         println("scan ended")
 
         // add wait task
-        timer.addTask(TimerTask(app.config.afterScanWaitTime, {
+        timer.addTask(TimerTask(app.config.afterScanWaitTime.value, {
             // switch scene
             println("switching to information scene")
             sceneChangeProposed = true
@@ -119,7 +119,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         }), true)
 
         // store pointcloud
-        if(!app.config.savePointClouds)
+        if(!app.config.savePointClouds.value)
             return
 
         if (!Files.exists(savePath)) {

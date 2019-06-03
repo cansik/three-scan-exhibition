@@ -2,6 +2,8 @@ package ch.bildspur.threescan.controller
 
 import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.model.pointcloud.PointCloud
+import ch.bildspur.threescan.util.rotate
+import ch.bildspur.threescan.util.translate
 import processing.core.PConstants.DISABLE_DEPTH_TEST
 import processing.core.PConstants.ENABLE_DEPTH_TEST
 import processing.core.PGraphics
@@ -23,7 +25,8 @@ class PointCloudRenderer(val app : Application) {
         g.hint(DISABLE_DEPTH_TEST)
         g.shader(pointShader)
         g.push()
-        g.translate(cloud.position.x, cloud.position.y, cloud.position.z)
+        g.translate(cloud.translation)
+        g.rotate(cloud.rotation)
         g.scale(cloud.scale)
 
         // set shader uniforms

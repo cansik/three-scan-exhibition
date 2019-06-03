@@ -86,6 +86,28 @@ class Application(val config: AppConfig) : PApplet() {
     override fun draw() {
         background(0)
         sceneManager.update(this.g)
+
+        showAxisMarker()
+    }
+
+    private fun showAxisMarker() {
+        val axisLength = 200
+        strokeWeight(3f)
+
+        // x
+        stroke(236f, 32f, 73f)
+        line(0f, 0f, 0f, axisLength.toFloat(), 0f, 0f)
+        text("X-axis", axisLength.toFloat(), 0f, 0f)
+
+        // y
+        stroke(47f, 149f, 153f)
+        line(0f, 0f, 0f, 0f, axisLength.toFloat(), 0f)
+        text("Y-axis", 0f, axisLength.toFloat(), 0f)
+
+        // z
+        stroke(247f, 219f, 79f)
+        line(0f, 0f, 0f, 0f, 0f, axisLength.toFloat())
+        text("Z-axis", 0f, 0f, axisLength.toFloat())
     }
 
     override fun stop() {

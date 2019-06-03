@@ -14,7 +14,7 @@ class InformationScene(app : Application) : BaseScene("Information Scene", app) 
     }
 
     override fun start() {
-        timer.addTask(TimerTask(1000 * 30, {
+        timer.addTask(TimerTask(app.config.informationWaitTime.value, {
             sceneChangeProposed = true
             nextScene = app.sceneManager.scanScene
         }), initTime = true)
@@ -26,7 +26,7 @@ class InformationScene(app : Application) : BaseScene("Information Scene", app) 
 
     override fun draw(g : PGraphics) {
         g.background(22f)
-        
+
     }
 
     override fun stop() {

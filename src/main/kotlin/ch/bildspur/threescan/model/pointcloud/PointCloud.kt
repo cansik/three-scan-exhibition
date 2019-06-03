@@ -21,7 +21,8 @@ import java.time.format.DateTimeFormatter
 
 class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {
     var scale : Float = 1.0f
-    var position = PVector()
+    var translation = PVector()
+    var rotation = PVector()
 
     var size = 0
         private set
