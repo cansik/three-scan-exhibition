@@ -9,7 +9,6 @@ attribute float intensity;
 
 varying vec4 vertColor;
 
-uniform float colorMix;
 uniform float pointScale;
 uniform vec4 pointColor;
 
@@ -20,8 +19,7 @@ void main() {
 	pt /= pointScale;
 
 	// change color
-	vec4 c = color; //mix(color, pointColor, colorMix);
-	c = vec4(color.r, intensity, 1.0, 1.0);
+	vec4 c = pointColor;
 
 	// apply view matrix
 	vec4 pos = modelview * pt;

@@ -42,7 +42,7 @@ class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {
     fun addVertex(vertex: Vertex) {
         val index = size
         vertexBuffer.setAttrib(PointCloudAttributes.INTENSITY.shaderName, index, vertex.signalStrength / 255f)
-        vertexBuffer.setStroke(index, app.color(vertex.signalStrength, 0, 255, 255))
+        vertexBuffer.setStroke(index, app.color(vertex.signalStrength, 0, 0, 0))
         vertexBuffer.setVertex(index, vertex.position)
         size++
     }

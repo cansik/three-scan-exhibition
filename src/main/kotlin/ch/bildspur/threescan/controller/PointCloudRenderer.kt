@@ -12,7 +12,6 @@ import processing.opengl.PShader
 class PointCloudRenderer(val app : Application) {
     lateinit var pointShader : PShader
 
-    var colorMix = 0.0f
     var pointColor = app.color(255)
     var pointScale = 1.0f
 
@@ -36,7 +35,6 @@ class PointCloudRenderer(val app : Application) {
             app.green(pointColor) / 255f,
             app.blue(pointColor) / 255f,
             app.alpha(pointColor) / 255f)
-        pointShader.set("colorMix", colorMix)
 
         // draw cloud
         g.shape(cloud.vertexBuffer)
