@@ -3,7 +3,7 @@ package ch.bildspur.threescan.scene
 import ch.bildspur.threescan.Application
 import processing.core.PGraphics
 
-class PreviewScene(app : Application) : BaseScene("Preview Scene", app) {
+class InformationScene(app : Application) : BaseScene("Information Scene", app) {
     override fun setup() {
 
     }

@@ -1,34 +1,37 @@
 package ch.bildspur.threescan.scene
 
 import ch.bildspur.threescan.Application
+import ch.bildspur.threescan.configuration.ConfigurationController
 import ch.bildspur.threescan.controller.PointCloudSync
 import ch.bildspur.threescan.controller.timer.Timer
 import ch.bildspur.threescan.controller.timer.TimerTask
 import ch.bildspur.threescan.model.pointcloud.PointCloud
 import ch.bildspur.threescan.util.format
-import com.sun.corba.se.impl.orbutil.graph.Graph
 import processing.core.PConstants
 import processing.core.PGraphics
-import kotlin.concurrent.thread
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
+    private val savePath = Paths.get(System.getProperty("user.home"), "pointclouds")
+
     var pointCloud = PointCloud(app, 1024 * 15)
 
     var cloudSync = PointCloudSync(app.scanner, pointCloud,
         syncEveryPoint = true, syncLimited = true, syncPointLimit = 10)
 
-    val syncTimer = Timer()
+    private val scanTimer = Timer()
 
     override fun setup() {
         app.scanner.onScanEnd += {
-            println("end")
+            scanEnded()
         }
 
         cloudSync.setup()
-        syncTimer.setup()
+        scanTimer.setup()
 
         // add sync task
-        syncTimer.addTask(TimerTask(100, {
+        scanTimer.addTask(TimerTask(100, {
             cloudSync.update()
         }))
     }
@@ -43,7 +46,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     }
 
     override fun logic() {
-        syncTimer.update()
+        scanTimer.update()
     }
 
     override fun draw(g : PGraphics) {
@@ -101,6 +104,33 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             g.stroke(255)
             g.line(a.x, a.y, a.z, b.x, b.y, b.z)
         }
+    }
+
+    private fun scanEnded() {
+        println("scan ended")
+
+        // add wait task
+        scanTimer.addTask(TimerTask(app.config.afterScanWaitTime, {
+            // switch scene
+            println("switching to information scene")
+            sceneChangeProposed = true
+            nextScene = app.sceneManager.informationScene
+            it.finished = true
+        }))
+
+        // store pointcloud
+        if(!app.config.savePointClouds)
+            return
+
+        if (!Files.exists(savePath)) {
+            Files.createDirectories(savePath)
+        }
+        pointCloud.save(Paths.get(savePath.toString(), "pcl-${app.config.cloudCount}.ply").toString())
+
+        // store cloud count
+        val configuration = ConfigurationController()
+        app.config.cloudCount++
+        configuration.saveAppConfig(app.config)
     }
 
 

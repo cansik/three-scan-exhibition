@@ -7,9 +7,9 @@ class SceneManager(app : Application) {
 
     // scenes
     val scanScene = ScanScene(app)
-    val previewScene = PreviewScene(app)
+    val informationScene = InformationScene(app)
 
-    val scenes = listOf(scanScene, previewScene)
+    val scenes = listOf(scanScene, informationScene)
     var currentScene : BaseScene = scanScene
 
     fun setup() {
