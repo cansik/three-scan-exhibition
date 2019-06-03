@@ -28,7 +28,10 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
     private val plotter = TextPlotter(app,
         text = app.config.informationText.value,
-        fontSize = 20f,
+        fontSize = 25f,
+        allCaps = true,
+        lineSpace = 25f * 1.4f,
+        maxWidth = 700f,
         position = PVector(30f, 100f)
     )
 
@@ -70,6 +73,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         plotter.show()
         timer.addTask(TimerTask(app.config.informationWaitTime.value, {
             plotter.hide()
+            it.finished = true
         }), initTime = true)
     }
 

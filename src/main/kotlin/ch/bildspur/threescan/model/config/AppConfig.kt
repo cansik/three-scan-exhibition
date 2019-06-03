@@ -14,13 +14,13 @@ class AppConfig {
 
     @Expose var savePointClouds = DataModel(true)
 
-    @Expose var afterScanWaitTime = DataModel(1000L * 60)
+    @Expose var afterScanWaitTime = DataModel(1000L * 90)
 
-    @Expose var informationWaitTime = DataModel(1000L * 30)
+    @Expose var informationWaitTime = DataModel(1000L * 60)
 
     @Expose var camerYRotationSpeed = DataModel(0.001)
 
     @Expose var informationText = DataModel("""
-        Hello World this is a simple text!
+        To generate an inclusive debate about ethical rules for machines and their influences on everyone's life, the understanding of how these devices work is crucial. Deep Vision examines and illustrates the interface between machine perception and human visual understanding through experiments in the fields of spatial computing, data processing, and information embodiment.
     """.trimIndent())
 }
