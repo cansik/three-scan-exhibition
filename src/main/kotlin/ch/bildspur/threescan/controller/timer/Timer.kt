@@ -21,7 +21,9 @@ class Timer {
         taskList = taskList.filter { !it.finished }.toMutableList()
     }
 
-    fun addTask(task: TimerTask) {
+    fun addTask(task: TimerTask, initTime : Boolean = false) {
+        if(initTime)
+            task.lastMillis = millis()
         taskList.add(task)
     }
 

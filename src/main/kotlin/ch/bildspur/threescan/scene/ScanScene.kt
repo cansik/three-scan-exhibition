@@ -20,7 +20,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     var cloudSync = PointCloudSync(app.scanner, pointCloud,
         syncEveryPoint = true, syncLimited = true, syncPointLimit = 10)
 
-    private val scanTimer = Timer()
+    private val timer = Timer()
 
     override fun setup() {
         app.scanner.onScanEnd += {
@@ -28,10 +28,10 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         }
 
         cloudSync.setup()
-        scanTimer.setup()
+        timer.setup()
 
         // add sync task
-        scanTimer.addTask(TimerTask(100, {
+        timer.addTask(TimerTask(100, {
             cloudSync.update()
         }))
     }
@@ -46,7 +46,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     }
 
     override fun logic() {
-        scanTimer.update()
+        timer.update()
     }
 
     override fun draw(g : PGraphics) {
@@ -110,13 +110,13 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         println("scan ended")
 
         // add wait task
-        scanTimer.addTask(TimerTask(app.config.afterScanWaitTime, {
+        timer.addTask(TimerTask(app.config.afterScanWaitTime, {
             // switch scene
             println("switching to information scene")
             sceneChangeProposed = true
             nextScene = app.sceneManager.informationScene
             it.finished = true
-        }))
+        }), true)
 
         // store pointcloud
         if(!app.config.savePointClouds)
