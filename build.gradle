@@ -33,6 +33,9 @@ dependencies {
     // serial
     compile files('lib/serial/jssc.jar')
     compile files('lib/serial/serial.jar')
+
+    // ply
+    compile files('lib/ply/sjmply.jar')
 }
 
 compileKotlin {
