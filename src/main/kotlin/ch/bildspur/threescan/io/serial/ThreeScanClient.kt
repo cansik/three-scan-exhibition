@@ -58,6 +58,10 @@ class ThreeScanClient(val app : Application) {
         communicationThread.join(5000)
     }
 
+    fun restartDevice() {
+        mcu.writeCommand("CMD:RESTART")
+    }
+
     fun startScan() {
         vertexBuffer.clear()
 
