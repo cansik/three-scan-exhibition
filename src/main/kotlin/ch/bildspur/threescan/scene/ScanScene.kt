@@ -5,7 +5,9 @@ import ch.bildspur.threescan.configuration.ConfigurationController
 import ch.bildspur.threescan.controller.PointCloudSync
 import ch.bildspur.threescan.controller.timer.Timer
 import ch.bildspur.threescan.controller.timer.TimerTask
+import ch.bildspur.threescan.ifDebug
 import ch.bildspur.threescan.model.pointcloud.PointCloud
+import ch.bildspur.threescan.text.TextPlotter
 import ch.bildspur.threescan.util.format
 import ch.bildspur.threescan.util.rotate
 import ch.bildspur.threescan.util.translate
@@ -24,6 +26,12 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     var cloudSync = PointCloudSync(app.scanner, pointCloud,
         syncEveryPoint = true, syncLimited = true, syncPointLimit = 10)
 
+    private val plotter = TextPlotter(app,
+        text = app.config.informationText.value,
+        fontSize = 20f,
+        position = PVector(30f, 100f)
+    )
+
     private val timer = Timer()
 
     override fun setup() {
@@ -33,6 +41,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
         cloudSync.setup()
         timer.setup()
+        plotter.setup()
 
         // set pointcloud translation
         pointCloud.translation = PVector(0f, 100f, 0f)
@@ -42,6 +51,11 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         timer.addTask(TimerTask(100, {
             cloudSync.update()
         }))
+
+        // add plotter task
+        timer.addTask(TimerTask(100, {
+            plotter.update()
+        }))
     }
 
     override fun start() {
@@ -49,8 +63,14 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         pointCloud.create()
 
         // start scanning
-        if(!app.scanner.scanning)
+        if(app.scanner.running && !app.scanner.scanning)
             app.scanner.startScan()
+
+        // setup information disappear
+        plotter.show()
+        timer.addTask(TimerTask(app.config.informationWaitTime.value, {
+            plotter.hide()
+        }), initTime = true)
     }
 
     override fun logic() {
@@ -70,12 +90,23 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         // render pointcloud
         app.pointCloudRenderer.render(g, pointCloud)
 
-        // draw hud
+        // render plot
         app.cam.hud {
-            app.style.text()
-            g.fill(255f)
-            g.textAlign(PConstants.LEFT, PConstants.BOTTOM)
-            g.text("FPS: ${app.frameRate.format(2)} Displayed Points: [${pointCloud.size}] Actual Points: [${app.scanner.getVertexBuffer().size}]", 20f, 30f)
+            plotter.render(g)
+        }
+
+        // draw hud
+        app.ifDebug {
+            app.cam.hud {
+                app.style.text()
+                g.fill(255f)
+                g.textAlign(PConstants.LEFT, PConstants.BOTTOM)
+                g.text(
+                    "FPS: ${app.frameRate.format(2)} Displayed Points: [${pointCloud.size}] Actual Points: [${app.scanner.getVertexBuffer().size}]",
+                    20f,
+                    30f
+                )
+            }
         }
     }
 
@@ -114,7 +145,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             // switch scene
             println("switching to information scene")
             sceneChangeProposed = true
-            nextScene = app.sceneManager.informationScene
+            nextScene = app.sceneManager.scanScene
             it.finished = true
         }), true)
 
@@ -129,7 +160,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
         // store cloud count
         val configuration = ConfigurationController()
-        app.config.cloudCount++
+        app.config.cloudCount.value++
         configuration.saveAppConfig(app.config)
     }
 

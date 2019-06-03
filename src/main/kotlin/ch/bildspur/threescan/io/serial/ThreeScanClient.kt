@@ -35,8 +35,10 @@ class ThreeScanClient(val app : Application) {
         return vertexBuffer
     }
 
-    fun open() {
-        mcu.attach()
+    fun open() : Boolean {
+        if(!mcu.attach())
+            return false
+
         running = true
 
         communicationThread = thread(isDaemon = true) {
@@ -45,6 +47,8 @@ class ThreeScanClient(val app : Application) {
                 readSerialData()
             }
         }
+
+        return true
     }
 
     fun close() {

@@ -1,6 +1,7 @@
 package ch.bildspur.threescan.io.serial
 
 import ch.bildspur.threescan.Application
+import com.sun.org.apache.xpath.internal.operations.Bool
 import processing.serial.Serial
 
 class SerialClient(val app : Application) {
@@ -10,11 +11,13 @@ class SerialClient(val app : Application) {
         return null != port
     }
 
-    fun attach() {
-        try {
+    fun attach() : Boolean {
+        return try {
             port = Serial(app, app.config.io.devicePort.value, app.config.io.baudRate.value)
+            true
         } catch (ex: Exception) {
             println("Serial Error: " + ex.message)
+            false
         }
     }
 
