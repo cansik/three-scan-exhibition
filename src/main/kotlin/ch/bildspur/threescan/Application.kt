@@ -2,6 +2,8 @@ package ch.bildspur.threescan
 
 import ch.bildspur.threescan.controller.PeasyController
 import ch.bildspur.threescan.controller.PointCloudRenderer
+import ch.bildspur.threescan.controller.timer.Timer
+import ch.bildspur.threescan.controller.timer.TimerTask
 import ch.bildspur.threescan.io.serial.ThreeScanClient
 import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.scene.SceneManager
@@ -49,6 +51,13 @@ class Application(val config: AppConfig) : PApplet() {
 
     val cam = PeasyController(this)
 
+    var setupFinished = false
+
+    val timer = Timer()
+
+    var lastCursorMoveTime = 0
+    var curserHideTime = 1000 * 5L
+
     override fun settings() {
         super.settings()
 
@@ -69,7 +78,22 @@ class Application(val config: AppConfig) : PApplet() {
 
         // change clipping
         perspective((PConstants.PI / 3.0).toFloat(), width.toFloat() / height, 0.1f, 100000f)
+    }
 
+    override fun draw() {
+        if(!setupFinished)
+            setupControllers()
+
+        background(0)
+        sceneManager.update(this.g)
+        timer.update()
+
+        ifDebug {
+            showAxisMarker()
+        }
+    }
+
+    private fun setupControllers() {
         // setup io
         scanner.open()
 
@@ -80,15 +104,17 @@ class Application(val config: AppConfig) : PApplet() {
         style.setup(this.g)
         cam.setup()
         sceneManager.setup()
-    }
 
-    override fun draw() {
-        background(0)
-        sceneManager.update(this.g)
+        timer.setup()
 
-        ifDebug {
-            showAxisMarker()
-        }
+        // timer for cursor hiding
+        timer.addTask(TimerTask(curserHideTime, {
+            val current = millis()
+            if (current - lastCursorMoveTime > curserHideTime)
+                noCursor()
+        }, "CursorHide"))
+
+        setupFinished = true
     }
 
     private fun showAxisMarker() {
@@ -117,6 +143,12 @@ class Application(val config: AppConfig) : PApplet() {
 
     fun run() {
         runSketch()
+    }
+
+    override fun mouseMoved() {
+        super.mouseMoved()
+        cursor()
+        lastCursorMoveTime = millis()
     }
 }
 
