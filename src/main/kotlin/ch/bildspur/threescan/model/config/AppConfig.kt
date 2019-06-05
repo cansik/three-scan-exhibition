@@ -4,7 +4,7 @@ import ch.bildspur.threescan.model.DataModel
 import com.google.gson.annotations.Expose
 
 class AppConfig {
-    @Expose var debuggingMode = DataModel(false)
+    @Expose var debuggingMode = DataModel(true)
 
     @Expose var visual = VisualConfig()
 

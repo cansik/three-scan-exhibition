@@ -8,7 +8,6 @@ import ch.bildspur.threescan.io.serial.ThreeScanClient
 import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.scene.SceneManager
 import ch.bildspur.threescan.style.AppStyle
-import ch.bildspur.threescan.util.format
 import processing.core.PApplet
 import processing.core.PConstants
 import kotlin.math.roundToInt
@@ -53,10 +52,10 @@ class Application(val config: AppConfig) : PApplet() {
 
     var setupFinished = false
 
-    val timer = Timer()
+    private val timer = Timer()
 
     var lastCursorMoveTime = 0
-    var curserHideTime = 1000 * 5L
+    var cursorHideTime = 1000 * 5L
 
     override fun settings() {
         super.settings()
@@ -108,9 +107,9 @@ class Application(val config: AppConfig) : PApplet() {
         timer.setup()
 
         // timer for cursor hiding
-        timer.addTask(TimerTask(curserHideTime, {
+        timer.addTask(TimerTask(cursorHideTime, {
             val current = millis()
-            if (current - lastCursorMoveTime > curserHideTime)
+            if (current - lastCursorMoveTime > cursorHideTime)
                 noCursor()
         }, "CursorHide"))
 

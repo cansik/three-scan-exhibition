@@ -26,14 +26,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     var cloudSync = PointCloudSync(app.scanner, pointCloud,
         syncEveryPoint = true, syncLimited = true, syncPointLimit = 10)
 
-    private val plotter = TextPlotter(app,
-        text = app.config.informationText.value,
-        fontSize = 25f,
-        allCaps = true,
-        lineSpace = 25f * 1.4f,
-        maxWidth = 700f,
-        position = PVector(30f, 100f)
-    )
+    private lateinit var plotter : TextPlotter
 
     private val timer = Timer()
 
@@ -41,6 +34,17 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         app.scanner.onScanEnd += {
             scanEnded()
         }
+
+        // setup plotter
+        val textSize = app.style.screenTextSize(30f)
+        plotter = TextPlotter(app,
+            text = app.config.informationText.value,
+            fontSize = textSize,
+            allCaps = true,
+            lineSpace = textSize * 1.5f,
+            maxWidth = 700f,
+            position = PVector(30f, 100f)
+        )
 
         cloudSync.setup()
         timer.setup()
