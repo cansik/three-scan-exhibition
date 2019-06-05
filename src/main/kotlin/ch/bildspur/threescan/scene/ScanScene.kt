@@ -165,7 +165,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         if (!Files.exists(savePath)) {
             Files.createDirectories(savePath)
         }
-        pointCloud.save(Paths.get(savePath.toString(), "pcl-${app.config.cloudCount}.ply").toString())
+        pointCloud.save(Paths.get(savePath.toString(), "pcl-${app.config.cloudCount.value}.ply").toString())
 
         // store cloud count
         val configuration = ConfigurationController()
