@@ -17,7 +17,8 @@ class TextPlotter(val app : Application,
                   var lineSpace : Float = fontSize * 1.2f,
                   var allCaps : Boolean = false,
                   var textColor : Int = app.color(255),
-                  var backgroundColor : Int = app.color(0, 0),
+                  var backgroundColor : Int = app.color(0),
+                  var backgroundOverLap : Float = 0.1f,
                   var showAnimationDuration : Long = 1000 * 15L,
                   var hideAnimationDuration : Long = 1000 * 10L) {
 
@@ -30,7 +31,7 @@ class TextPlotter(val app : Application,
     private var hideAnimation = Animation(app, hideAnimationDuration)
 
     fun setup() {
-        font = app.createFont("SourceCodePro-Bold.otf", fontSize)
+        font = app.createFont("SourceCodePro-Light.otf", fontSize)
         addNewText(text)
 
         hideAnimation.finished += {
@@ -68,10 +69,21 @@ class TextPlotter(val app : Application,
         // normal mode
         if(!showAnimation.running && !hideAnimation.running) {
             lines.forEachIndexed { i, line ->
-                g.text(preProcess(line), 0f, i * lineSpace)
+                drawLine(g, preProcess(line), 0f, i * lineSpace)
             }
         }
         g.pop()
+    }
+
+    private fun drawLine(g: PGraphics, text : String, x : Float, y : Float) {
+        val tfill = g.fillColor
+        val overlap = backgroundOverLap * fontSize
+        g.noStroke()
+        g.fill(backgroundColor, g.alpha(tfill))
+        g.rect(x, y - (overlap + fontSize), g.textWidth(text), fontSize + (2 * overlap))
+
+        g.fill(tfill)
+        g.text(text, x, y)
     }
 
     private fun introAnimation(g : PGraphics) {
@@ -81,7 +93,7 @@ class TextPlotter(val app : Application,
             g.fill(textColor, Application.map(showAnimation.value.toDouble(),
                 normLine * i, normLine * i + normLine, 0.0, 255.0)
                 .toFloat().limit(0.0f, 255.0f))
-            g.text(preProcess(line), 0f, i * lineSpace)
+            drawLine(g, preProcess(line), 0f, i * lineSpace)
         }
     }
 
@@ -90,7 +102,7 @@ class TextPlotter(val app : Application,
             0.0, 1.0, 255.0, 0.0).toFloat())
 
         lines.forEachIndexed { i, line ->
-            g.text(preProcess(line), 0f, i * lineSpace)
+            drawLine(g, preProcess(line), 0f, i * lineSpace)
         }
     }
 

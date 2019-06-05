@@ -40,8 +40,8 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         plotter = TextPlotter(app,
             text = app.config.informationText.value,
             fontSize = textSize,
-            allCaps = true,
-            lineSpace = textSize * 1.5f,
+            allCaps = false,
+            lineSpace = textSize * 1.3f,
             maxWidth = 700f,
             position = PVector(30f, 100f)
         )
@@ -137,9 +137,9 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             val a = pointCloud.vertexBuffer.getVertex(indexPointA)
             val b = pointCloud.vertexBuffer.getVertex(indexPointB)
 
-            g.strokeWeight(0.5f)
+            g.strokeWeight(2.0f)
             g.noFill()
-            g.stroke(255)
+            g.stroke(255f, 0f, 0f)
             g.line(a.x, a.y, a.z, b.x, b.y, b.z)
         }
         g.pop()
