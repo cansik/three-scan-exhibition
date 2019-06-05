@@ -113,7 +113,7 @@ class ThreeScanClient(val app : Application) {
 
             "DAT" -> {
                 // data point
-                val x = parseFloat(data[0].trim())
+                val x = parseFloat(data[0].trim()) * -1 // flip x axis todo: make this nicer!
                 val y = parseFloat(data[1].trim())
                 val z = parseFloat(data[2].trim())
                 val signalStrength = parseInt(data[3].trim())
