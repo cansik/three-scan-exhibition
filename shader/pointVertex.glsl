@@ -16,7 +16,7 @@ void main() {
 	vec4 pt = position;
 
 	// scale points
-	pt /= pointScale + (color.r * 2.0);
+	pt /= pointScale;
 
 	// change color
 	vec4 c = pointColor;
