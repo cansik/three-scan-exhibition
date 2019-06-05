@@ -21,7 +21,7 @@ import java.nio.file.Paths
 class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     private val savePath = Paths.get(System.getProperty("user.home"), "pointclouds")
 
-    var pointCloud = PointCloud(app, 1024 * 15)
+    var pointCloud = PointCloud(app, 1024 * 60)
 
     var cloudSync = PointCloudSync(app.scanner, pointCloud,
         syncEveryPoint = true, syncLimited = true, syncPointLimit = 10)

@@ -19,7 +19,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 
-class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 60) {
+class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {
     var scale : Float = 1.0f
     var translation = PVector()
     var rotation = PVector()
