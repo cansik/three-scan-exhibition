@@ -2,8 +2,8 @@ package ch.bildspur.threescan.text
 
 import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.animation.Animation
+import ch.bildspur.threescan.util.limit
 import ch.bildspur.threescan.util.translate
-import processing.core.PApplet
 import processing.core.PFont
 import processing.core.PGraphics
 import processing.core.PVector
@@ -18,7 +18,7 @@ class TextPlotter(val app : Application,
                   var allCaps : Boolean = false,
                   var textColor : Int = app.color(255),
                   var backgroundColor : Int = app.color(0, 0),
-                  var showAnimationDuration : Long = 1000 * 5L,
+                  var showAnimationDuration : Long = 1000 * 20L,
                   var hideAnimationDuration : Long = 1000 * 10L) {
 
     private lateinit var font : PFont
@@ -53,23 +53,45 @@ class TextPlotter(val app : Application,
         g.textFont(font)
         g.translate(position)
         g.textSize(fontSize)
-
         g.fill(textColor)
 
+        // showing mode
         if(showAnimation.running) {
-            g.fill(textColor, Application.map(showAnimation.value.toDouble(),
-                0.0, 1.0, 0.0, 255.0).toFloat())
+            introAnimation(g)
         }
 
+        // hiding mode
         if(hideAnimation.running) {
-            g.fill(textColor, Application.map(hideAnimation.value.toDouble(),
-                0.0, 1.0, 255.0, 0.0).toFloat())
+            outroAnimation(g)
         }
+
+        // normal mode
+        if(!showAnimation.running && !hideAnimation.running) {
+            lines.forEachIndexed { i, line ->
+                g.text(preProcess(line), 0f, i * lineSpace)
+            }
+        }
+        g.pop()
+    }
+
+    private fun introAnimation(g : PGraphics) {
+        val normLine = 1.0 / lines.size
+
+        lines.forEachIndexed { i, line ->
+            g.fill(textColor, Application.map(showAnimation.value.toDouble(),
+                normLine * i, normLine * i + normLine, 0.0, 255.0)
+                .toFloat().limit(0.0f, 255.0f))
+            g.text(preProcess(line), 0f, i * lineSpace)
+        }
+    }
+
+    private fun outroAnimation(g : PGraphics) {
+        g.fill(textColor, Application.map(hideAnimation.value.toDouble(),
+            0.0, 1.0, 255.0, 0.0).toFloat())
 
         lines.forEachIndexed { i, line ->
             g.text(preProcess(line), 0f, i * lineSpace)
         }
-        g.pop()
     }
 
     fun update() {

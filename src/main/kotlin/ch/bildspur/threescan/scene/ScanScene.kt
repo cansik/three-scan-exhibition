@@ -75,6 +75,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
         // setup information disappear
         plotter.show()
+
         timer.addTask(TimerTask(app.config.informationWaitTime.value, {
             plotter.hide()
             it.finished = true
