@@ -18,7 +18,7 @@ class TextPlotter(val app : Application,
                   var allCaps : Boolean = false,
                   var textColor : Int = app.color(255),
                   var backgroundColor : Int = app.color(0, 0),
-                  var showAnimationDuration : Long = 1000 * 20L,
+                  var showAnimationDuration : Long = 1000 * 15L,
                   var hideAnimationDuration : Long = 1000 * 10L) {
 
     private lateinit var font : PFont
