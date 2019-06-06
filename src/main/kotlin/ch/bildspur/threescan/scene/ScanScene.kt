@@ -38,6 +38,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         // no sync in time
         println("sync timeout triggered, restarting scanner...")
         app.scanner.stopScan()
+        Thread.sleep(500)
         app.scanner.close()
         Thread.sleep(5000)
         println("opening scanner...")
