@@ -27,6 +27,10 @@ class Timer {
         taskList.add(task)
     }
 
+    fun resetTask(task : TimerTask) {
+        task.lastMillis = millis()
+    }
+
     private fun millis(): Long {
         return System.currentTimeMillis()
     }

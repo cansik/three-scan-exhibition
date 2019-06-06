@@ -30,9 +30,37 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
 
     private val timer = Timer()
 
+    // timeout task
+    val syncTimeoutTask = TimerTask(45 * 1000, {
+        if(!app.scanner.scanning)
+            return@TimerTask
+
+        // no sync in time
+        println("sync timeout triggered, restarting scanner...")
+        app.scanner.stopScan()
+        app.scanner.close()
+        Thread.sleep(5000)
+        println("opening scanner...")
+        app.scanner.open()
+        Thread.sleep(1000)
+
+        timer.taskList.forEach { tt ->
+            tt.lastMillis = 0
+        }
+        timer.resetTask(it)
+
+        println("switching to new scene")
+        sceneChangeProposed = true
+        nextScene = app.sceneManager.scanScene
+    })
+
     override fun setup() {
         app.scanner.onScanEnd += {
             scanEnded()
+        }
+
+        app.scanner.onScanSync += {
+            timer.resetTask(syncTimeoutTask)
         }
 
         // setup plotter
@@ -63,6 +91,9 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         timer.addTask(TimerTask(100, {
             plotter.update()
         }))
+
+        // add sync task
+        timer.addTask(syncTimeoutTask, initTime = true)
     }
 
     override fun start() {
@@ -80,6 +111,8 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             plotter.hide()
             it.finished = true
         }), initTime = true)
+
+        timer.resetTask(syncTimeoutTask)
     }
 
     override fun logic() {
@@ -152,7 +185,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         // add wait task
         timer.addTask(TimerTask(app.config.afterScanWaitTime.value, {
             // switch scene
-            println("switching to information scene")
+            println("switching to scan scene")
             sceneChangeProposed = true
             nextScene = app.sceneManager.scanScene
             it.finished = true

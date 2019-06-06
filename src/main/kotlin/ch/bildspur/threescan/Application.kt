@@ -149,6 +149,12 @@ class Application(val config: AppConfig) : PApplet() {
         cursor()
         lastCursorMoveTime = millis()
     }
+
+    override fun keyPressed() {
+        if (key == ' ') {
+            sceneManager.scanScene.syncTimeoutTask.lastMillis = 0
+        }
+    }
 }
 
 fun Application.ifDebug(block : () -> Unit) {
