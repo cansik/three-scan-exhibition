@@ -31,6 +31,7 @@ class SerialClient(val app : Application) {
 
     fun detach() {
         port!!.stop()
+        port!!.clear()
         port = null
     }
 }

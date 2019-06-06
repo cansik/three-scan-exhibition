@@ -4,6 +4,7 @@ import ch.bildspur.threescan.Application
 import ch.bildspur.threescan.animation.Animation
 import ch.bildspur.threescan.util.limit
 import ch.bildspur.threescan.util.translate
+import processing.core.PConstants
 import processing.core.PFont
 import processing.core.PGraphics
 import processing.core.PVector
@@ -78,6 +79,7 @@ class TextPlotter(val app : Application,
     private fun drawLine(g: PGraphics, text : String, x : Float, y : Float) {
         val tfill = g.fillColor
         val overlap = backgroundOverLap * fontSize
+        g.textAlign(PConstants.LEFT, PConstants.TOP)
         g.noStroke()
         g.fill(backgroundColor, g.alpha(tfill))
         g.rect(x, y - (overlap + fontSize), g.textWidth(text), fontSize + (2 * overlap))
