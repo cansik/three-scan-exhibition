@@ -135,6 +135,15 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         // render plot
         app.cam.hud {
             plotter.render(g)
+
+            // render point count
+            g.push()
+            g.textFont(plotter.font)
+            g.translate(g.width - 30f, 25f)
+            g.textSize(plotter.fontSize * 0.5f)
+            g.textAlign(PConstants.RIGHT, PConstants.CENTER)
+            g.text("${pointCloud.size} pts", 0f, 0f)
+            g.pop()
         }
 
         // draw hud

@@ -22,7 +22,7 @@ class TextPlotter(val app : Application,
                   var showAnimationDuration : Long = 1000 * 15L,
                   var hideAnimationDuration : Long = 1000 * 10L) {
 
-    private lateinit var font : PFont
+    lateinit var font : PFont
     var visible = true
 
     private var lines = emptyList<String>()
