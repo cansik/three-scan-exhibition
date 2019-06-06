@@ -80,7 +80,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         plotter.setup()
 
         // set pointcloud translation
-        pointCloud.translation = PVector(0f, 100f, 0f)
+        pointCloud.translation = PVector(0f, 80f, 0f)
         pointCloud.rotation = PVector(PApplet.radians(90f), 0f, 0f)
 
         // add sync task
@@ -121,7 +121,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     }
 
     override fun draw(g : PGraphics) {
-        g.background(22f)
+        g.background(12f)
 
         // highlight points
         if(app.scanner.scanning)
@@ -140,10 +140,10 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
             // render point count
             g.push()
             g.textFont(plotter.font)
-            g.translate(g.width - 30f, 25f)
+            g.translate(g.width - 30f, g.height - 25f)
             g.textSize(plotter.fontSize * 0.5f)
             g.textAlign(PConstants.RIGHT, PConstants.CENTER)
-            g.text("${pointCloud.size} pts", 0f, 0f)
+            g.text("${pointCloud.size} pts - ${app.config.cloudCount.value} pcl", 0f, 0f)
             g.pop()
         }
 
