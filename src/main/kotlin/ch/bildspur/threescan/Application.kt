@@ -8,6 +8,8 @@ import ch.bildspur.threescan.io.serial.ThreeScanClient
 import ch.bildspur.threescan.model.config.AppConfig
 import ch.bildspur.threescan.scene.SceneManager
 import ch.bildspur.threescan.style.AppStyle
+import ch.bildspur.threescan.thread.ProcessingInvoker
+import ch.bildspur.threescan.thread.ProcessingTask
 import processing.core.PApplet
 import processing.core.PConstants
 import kotlin.math.roundToInt
@@ -52,6 +54,8 @@ class Application(val config: AppConfig) : PApplet() {
 
     var setupFinished = false
 
+    val invoker = ProcessingInvoker()
+
     private val timer = Timer()
 
     var lastCursorMoveTime = 0
@@ -86,6 +90,7 @@ class Application(val config: AppConfig) : PApplet() {
         background(0)
         sceneManager.update(this.g)
         timer.update()
+        invoker.invokeTasks()
 
         ifDebug {
             showAxisMarker()
@@ -114,6 +119,15 @@ class Application(val config: AppConfig) : PApplet() {
         }, "CursorHide"))
 
         setupFinished = true
+
+        kotlin.concurrent.thread {
+            while(true) {
+                Thread.sleep(1000)
+                this.invokeOnProcessing {
+                    this.g.background(0f, 255f, 0f)
+                }
+            }
+        }
     }
 
     private fun showAxisMarker() {
@@ -155,6 +169,10 @@ class Application(val config: AppConfig) : PApplet() {
             sceneManager.scanScene.syncTimeoutTask.lastMillis = 0
         }
     }
+}
+
+fun Application.invokeOnProcessing(block : () -> Unit) {
+    this.invoker.addTask(ProcessingTask(block))
 }
 
 fun Application.ifDebug(block : () -> Unit) {
