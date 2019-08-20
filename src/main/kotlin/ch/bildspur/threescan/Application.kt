@@ -119,15 +119,6 @@ class Application(val config: AppConfig) : PApplet() {
         }, "CursorHide"))
 
         setupFinished = true
-
-        kotlin.concurrent.thread {
-            while(true) {
-                Thread.sleep(1000)
-                this.invokeOnProcessing {
-                    this.g.background(0f, 255f, 0f)
-                }
-            }
-        }
     }
 
     private fun showAxisMarker() {
