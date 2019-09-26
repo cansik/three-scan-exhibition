@@ -17,6 +17,10 @@ import java.nio.file.Paths
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import processing.opengl.PShapeOpenGL.createShape
+import org.jengineering.sjmply.PLYType.UINT8
+import org.jengineering.sjmply.PLYType.FLOAT32
+import kotlin.experimental.and
 
 
 class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {
@@ -111,5 +115,58 @@ class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
+    }
+
+    fun load(fileName: String) {
+        val path = Paths.get(fileName)
+        var ply = PLY()
+
+        try {
+            ply = PLY.load(path)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+
+        val vertex = ply.elements("vertex")
+
+        // coordinates
+        val x = vertex.property(FLOAT32, "x")
+        val y = vertex.property(FLOAT32, "y")
+        val z = vertex.property(FLOAT32, "z")
+
+        // colors
+        var r = ByteArray(0)
+        var g = ByteArray(0)
+        var b = ByteArray(0)
+        var colorLoaded = false
+
+        try {
+            r = vertex.property(UINT8, "red")
+            g = vertex.property(UINT8, "green")
+            b = vertex.property(UINT8, "blue")
+
+            colorLoaded = true
+        } catch (ex: Exception) {
+            println("no color information!")
+        }
+
+        vertexBuffer = app.createShape()
+        vertexBuffer.beginShape(POINTS)
+
+        for (i in x.indices) {
+            vertexBuffer.strokeWeight(1.0f)
+
+            if (colorLoaded) {
+                val rv = r[i].toInt() and 0xFF
+                val gv = g[i].toInt() and 0xFF
+                val bv = b[i].toInt() and 0xFF
+                vertexBuffer.stroke(rv.toFloat(), gv.toFloat(), bv.toFloat())
+            } else {
+                vertexBuffer.stroke(255)
+            }
+            vertexBuffer.vertex(x[i], -y[i], z[i])
+        }
+
+        vertexBuffer.endShape()
     }
 }
