@@ -59,7 +59,7 @@ class Application(val config: AppConfig) : PApplet() {
 
     private val timer = Timer()
 
-    val demoMode = DemoMode()
+    val demoMode = DemoMode(this)
 
     var lastCursorMoveTime = 0
     var cursorHideTime = 1000 * 5L
