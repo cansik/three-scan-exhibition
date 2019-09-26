@@ -16,7 +16,7 @@ class AppConfig {
 
     @Expose var demoMode = DataModel(true)
 
-    @Expose var demoCloud = DataModel("data/Tree_300k.ply")
+    @Expose var demoCloud = DataModel("data/Platzspitz_700k.ply")
 
     @Expose var savePointClouds = DataModel(true)
 

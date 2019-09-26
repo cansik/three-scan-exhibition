@@ -17,8 +17,14 @@ class DemoMode(val app : Application) {
     fun renderDemo(g : PGraphics) {
         g.push()
         // todo: create applications for this
-        g.scale(20f)
-        g.translate(0f, 10f, 0f)
+        // tree
+        //g.scale(20f)
+        //g.translate(0f, 10f, 0f)
+
+        // platzspitz
+        g.scale(12f)
+        g.translate(0f, -5f, 0f)
+
         g.shape(cloud.vertexBuffer)
         g.pop()
     }
