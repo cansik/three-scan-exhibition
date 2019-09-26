@@ -79,7 +79,8 @@ class TextPlotter(val app : Application,
     private fun drawLine(g: PGraphics, text : String, x : Float, y : Float) {
         val tfill = g.fillColor
         val overlap = backgroundOverLap * fontSize
-        g.textAlign(PConstants.LEFT, PConstants.TOP)
+        // todo: fix this for production -> leads to black frame over text
+        //g.textAlign(PConstants.LEFT, PConstants.TOP)
         g.noStroke()
         g.fill(backgroundColor, g.alpha(tfill))
         g.rect(x, y - (overlap + fontSize), g.textWidth(text), fontSize + (2 * overlap))

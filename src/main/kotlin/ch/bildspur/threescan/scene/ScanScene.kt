@@ -123,15 +123,20 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
     override fun draw(g : PGraphics) {
         g.background(12f)
 
-        // highlight points
-        if(app.scanner.scanning)
-            highLightNewPoints(g)
-
         // auto rotate camera
         app.cam.cam.rotateY(app.config.camerYRotationSpeed.value)
 
-        // render pointcloud
-        app.pointCloudRenderer.render(g, pointCloud)
+
+        if(app.config.demoMode.value.not()) {
+            // highlight points
+            if (app.scanner.scanning)
+                highLightNewPoints(g)
+
+            // render pointcloud
+            app.pointCloudRenderer.render(g, pointCloud)
+        } else {
+            app.demoMode.renderDemo(g)
+        }
 
         // render plot
         app.cam.hud {

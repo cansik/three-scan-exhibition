@@ -13,7 +13,7 @@ class PointCloudRenderer(val app : Application) {
     lateinit var pointShader : PShader
 
     var pointColor = app.color(255)
-    var pointScale = 1.0f
+    var pointScale = app.config.pointSize.value
 
     fun setup() {
         pointShader = app.loadShader("shader/pointColor.glsl", "shader/pointVertex.glsl")

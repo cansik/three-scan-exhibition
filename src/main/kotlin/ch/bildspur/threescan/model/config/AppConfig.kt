@@ -12,6 +12,10 @@ class AppConfig {
 
     @Expose var cloudCount = DataModel(0)
 
+    @Expose var pointSize = DataModel(2f)
+
+    @Expose var demoMode = DataModel(true)
+
     @Expose var savePointClouds = DataModel(true)
 
     @Expose var afterScanWaitTime = DataModel(1000L * 90)

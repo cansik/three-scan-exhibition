@@ -1,5 +1,6 @@
 package ch.bildspur.threescan
 
+import ch.bildspur.threescan.controller.DemoMode
 import ch.bildspur.threescan.controller.PeasyController
 import ch.bildspur.threescan.controller.PointCloudRenderer
 import ch.bildspur.threescan.controller.timer.Timer
@@ -58,6 +59,8 @@ class Application(val config: AppConfig) : PApplet() {
 
     private val timer = Timer()
 
+    val demoMode = DemoMode()
+
     var lastCursorMoveTime = 0
     var cursorHideTime = 1000 * 5L
 
@@ -100,6 +103,11 @@ class Application(val config: AppConfig) : PApplet() {
     private fun setupControllers() {
         // setup io
         scanner.open()
+
+        // demo mode
+        if(config.demoMode.value) {
+            demoMode.setup()
+        }
 
         // setup renderer
         pointCloudRenderer.setup()
