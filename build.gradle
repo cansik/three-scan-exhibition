@@ -1,15 +1,9 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.21'
-    id 'application'
 }
 
 group 'ch.bildspur.threescan'
 version '1.0-SNAPSHOT'
-
-application {
-    mainClassName = "ch.bildspur.threescan.Main"
-    applicationDefaultJvmArgs = ["-Djava.library.path=lib/serial/macosx"]
-}
 
 repositories {
     mavenCentral()
@@ -43,4 +37,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+    main = 'ch.bildspur.threescan.Main'
+    jvmArgs = ["-Djava.library.path=lib/serial/macosx"]
+    classpath = sourceSets.main.runtimeClasspath
 }

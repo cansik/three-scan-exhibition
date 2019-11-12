@@ -124,7 +124,7 @@ class ScanScene(app : Application) : BaseScene("Scan Scene", app) {
         g.background(12f)
 
         // auto rotate camera
-        app.cam.cam.rotateY(app.config.camerYRotationSpeed.value)
+        app.cam.cam.rotateY(app.config.cameraYRotationSpeed.value)
 
 
         if(app.config.demoMode.value.not()) {
