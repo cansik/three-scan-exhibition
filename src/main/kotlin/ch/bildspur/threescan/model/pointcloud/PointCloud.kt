@@ -1,26 +1,18 @@
 package ch.bildspur.threescan.model.pointcloud
 
+import org.jengineering.sjmply.PLY
+import org.jengineering.sjmply.PLYElementList
+import org.jengineering.sjmply.PLYFormat
+import org.jengineering.sjmply.PLYType.FLOAT32
+import org.jengineering.sjmply.PLYType.UINT8
 import processing.core.PApplet
 import processing.core.PConstants.POINTS
 import processing.core.PShape
 import processing.core.PVector
-import jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType.ASCII
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.red
-import org.jengineering.sjmply.PLYType.UINT8
-import org.jengineering.sjmply.PLYType.FLOAT32
-import org.jengineering.sjmply.PLYElementList
-import org.jengineering.sjmply.PLY
-import org.jengineering.sjmply.PLYFormat
 import java.nio.file.Paths
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import processing.opengl.PShapeOpenGL.createShape
-import org.jengineering.sjmply.PLYType.UINT8
-import org.jengineering.sjmply.PLYType.FLOAT32
-import kotlin.experimental.and
 
 
 class PointCloud(val app : PApplet, private val bufferSize : Int = 1024 * 30) {

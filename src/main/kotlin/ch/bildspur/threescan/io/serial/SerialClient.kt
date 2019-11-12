@@ -1,7 +1,6 @@
 package ch.bildspur.threescan.io.serial
 
 import ch.bildspur.threescan.Application
-import com.sun.org.apache.xpath.internal.operations.Bool
 import processing.serial.Serial
 
 class SerialClient(val app : Application) {
