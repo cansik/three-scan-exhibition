@@ -30,7 +30,7 @@ brew tap xfreebird/utils
 brew install kcpassword
 
 echo 'setup autostart...'
-AUTOSTART_SCRIPT=to-abs-path "../autostartDeepVision.command"
+AUTOSTART_SCRIPT=$(to-abs-path "../autostartDeepVision.command")
 osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$AUTOSTART_SCRIPT\", hidden:false}"
 
 echo "setup auto login..."
