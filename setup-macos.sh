@@ -15,9 +15,15 @@ function to-abs-path {
 echo 'installing brew...'
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
+echo 'installing git...'
+brew install git
+
 echo 'installing adopt open jdk 11...'
 brew tap AdoptOpenJDK/openjdk
 brew cask install adoptopenjdk11
+
+echo 'install driver...'
+echo 'no driver set yet
 
 echo 'setup power management...'
 sudo systemsetup -setdisplaysleep Never
@@ -37,6 +43,6 @@ echo "setup auto login..."
 read -p "Enter username: " username
 read -s "Enter password: " password
 
-enable_autologin "$username" "$password"
+#enable_autologin "$username" "$password"
 
 echo "every thing is setup and should work!"
