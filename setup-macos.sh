@@ -23,7 +23,7 @@ brew tap AdoptOpenJDK/openjdk
 brew cask install adoptopenjdk11
 
 echo 'install driver...'
-echo 'no driver set yet
+echo 'no driver set yet'
 
 echo 'setup power management...'
 sudo systemsetup -setdisplaysleep Never
